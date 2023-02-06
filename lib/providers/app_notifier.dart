@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../data/disk_usage_repository.dart';
 import 'providers.dart';
 
 class AppState {
@@ -43,10 +44,12 @@ class AppState {
 
 class AppNotifier extends Notifier<AppState> {
   late PreferencesRepository _preferencesRepository;
+  late DiskUsageRepository _diskUsageRepository;
 
   @override
   AppState build() {
     _preferencesRepository = ref.read(preferencesRepositoryProvider);
+    _diskUsageRepository = ref.read(diskUsageRepositoryProvider);
     return AppState(
       message: 'initialized',
       appVersion: _preferencesRepository.appVersion,
@@ -59,8 +62,8 @@ class AppNotifier extends Notifier<AppState> {
     debugPrint('setDefaultDirectory: $directoryPath');
   }
 
-  void scanDirectory() {
-    debugPrint('scanDirectory');
+  Future<void> scanDirectory() {
+    return _diskUsageRepository.scanDiskUsage(state.currentDirectory);
   }
 }
 
