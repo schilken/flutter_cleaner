@@ -8,10 +8,6 @@ class InMemoryStore<T> {
   /// The BehaviorSubject that holds the data
   final BehaviorSubject<T> _subject;
 
-  startNewProgress() {
-    _subject.add(null);
-  }
-
   /// The output stream that can be used to listen to the data
   Stream<T> get stream => _subject.stream;
 
