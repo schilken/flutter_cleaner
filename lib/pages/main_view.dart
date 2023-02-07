@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../providers/app_notifier.dart';
 import 'home_page.dart';
-import 'settings_page.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -26,9 +23,9 @@ class _MainViewState extends State<MainView> {
           color: Colors.grey.shade200,
         ),
         minWidth: 200,
-        bottom: MacosListTile(
-          leading: const MacosIcon(CupertinoIcons.app_badge),
-          title: const Text('Flutter Cleaner'),
+        bottom: const MacosListTile(
+          leading: MacosIcon(CupertinoIcons.app_badge),
+          title: Text('Flutter Cleaner'),
           subtitle: Text('appState.appVersion'),
         ),
         builder: (context, scrollController) => SidebarItems(

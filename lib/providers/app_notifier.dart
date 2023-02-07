@@ -2,8 +2,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'disk_usage_notifier.dart';
-import 'disk_usage_repository.dart';
 import 'providers.dart';
 
 class AppState {
@@ -45,12 +43,10 @@ class AppState {
 
 class AppNotifier extends Notifier<AppState> {
   late PreferencesRepository _preferencesRepository;
-  late DiskUsageRepository _diskUsageRepository;
 
   @override
   AppState build() {
     _preferencesRepository = ref.read(preferencesRepositoryProvider);
-    _diskUsageRepository = ref.read(diskUsageRepositoryProvider);
     return AppState(
       message: 'initialized',
       appVersion: _preferencesRepository.appVersion,
