@@ -32,14 +32,18 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
   bool get isLoading => state.isLoading;
 
   void selectRecord(int index, bool? value) {
-    _records[index] = _records[index].copyWith(selected: value);
+    _records[index] = _records[index].copyWith(isSelected: value);
     state = AsyncValue.data(_records);
   }
 
   deleteSelectedDirectories() {
     debugPrint('deleteSelectedDirectories');
+    final directoriesToDelete =
+        _records.where((r) => r.isSelected).map((r) => r.directoryPath);
+    directoriesToDelete.forEach((directory) {
+      print('delete $directory');
+    });
   }
-
 
 }
 

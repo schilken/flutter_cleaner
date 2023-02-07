@@ -13,7 +13,13 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appState = ref.watch(appNotifier);
-    final diskUsageAsyncValue = ref.watch(diskUsageNotifier); 
+    final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
+    final selectedRecordCount = diskUsageAsyncValue.maybeMap<int>(
+        data: (data) {
+          final records = data.value ?? [];
+          return records.where((r) => r.isSelected).length;
+        },
+        orElse: () => 0);
     return Builder(
       builder: (context) {
         return MacosScaffold(
@@ -80,10 +86,14 @@ class HomePage extends ConsumerWidget {
                               buttonSize: ButtonSize.large,
                               isSecondary: true,
                               color: Colors.white,
-                              child: const Text('Delete selected Directories'),
-                              onPressed: () => ref
+                            child: Text(
+                                'Delete selected $selectedRecordCount Directories'),
+                            onPressed: selectedRecordCount > 0
+                                ? () => ref
                                   .read(diskUsageNotifier.notifier)
-                                  .deleteSelectedDirectories()),
+                                    .deleteSelectedDirectories()
+                                : null,
+                          ),
                           // Text(
                           //     '${state.fileCount}|${state.primaryHitCount}|${state.secondaryHitCount}'),
                         ],
@@ -110,7 +120,7 @@ class HomePage extends ConsumerWidget {
                                 final record = records[index];
                                 return Material(
                                   child: CheckboxListTile(
-                                    value: record.selected,
+                                    value: record.isSelected,
                                     title: Text(
                                       record.directoryPath,
                                     ),

@@ -49,7 +49,7 @@ class DiskUsageRepository {
         return DiskUsageRecord(
             directoryPath: pathName.trim().replaceFirst('./', ''),
             size: int.parse(usageInKB),
-            selected: false);
+            isSelected: false);
       }
     }
     return null;

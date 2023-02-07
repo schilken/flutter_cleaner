@@ -1,22 +1,22 @@
 class DiskUsageRecord {
   final String directoryPath;
   final int size;
-  final bool selected;
+  final bool isSelected;
   DiskUsageRecord({
     required this.directoryPath,
     required this.size,
-    required this.selected,
+    required this.isSelected,
   });
 
   DiskUsageRecord copyWith({
     String? directoryPath,
     int? size,
-    bool? selected,
+    bool? isSelected,
   }) {
     return DiskUsageRecord(
       directoryPath: directoryPath ?? this.directoryPath,
       size: size ?? this.size,
-      selected: selected ?? this.selected,
+      isSelected: isSelected ?? this.isSelected,
     );
   }
 
@@ -26,10 +26,10 @@ class DiskUsageRecord {
 
     return other.directoryPath == directoryPath &&
         other.size == size &&
-        other.selected == selected;
+        other.isSelected == isSelected;
   }
 
   @override
   int get hashCode =>
-      directoryPath.hashCode ^ size.hashCode ^ selected.hashCode;
+      directoryPath.hashCode ^ size.hashCode ^ isSelected.hashCode;
 }
