@@ -83,11 +83,18 @@ class HomePage extends ConsumerWidget {
                           itemBuilder: (_, index) {
                             final record = records[index];
                             return Material(
-                              child: ListTile(
+                            child: CheckboxListTile(
+                              value: record.selected,
                                 title: Text(
                                   record.directoryPath,
                                 ),
                               subtitle: Text('${record.size.toString()} kb'),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              onChanged: (bool? value) {
+                                ref
+                                    .read(diskUsageNotifier.notifier)
+                                    .selectRecord(index, value);
+                              },
                               ),
                             );
                           },

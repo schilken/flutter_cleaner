@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../data/disk_usage_record.dart';
@@ -11,6 +12,7 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
   DiskUsageNotifier();
 
   late DiskUsageRepository _diskUsageRepository;
+  final _records = <DiskUsageRecord>[];
 
   @override
   FutureOr<List<DiskUsageRecord>?> build() async {
@@ -23,9 +25,16 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
     state = await AsyncResult.guard(
       () => _diskUsageRepository.scanDiskUsage(directory),
     );
+    _records.clear();
+    _records.addAll(state.value ?? []);
   }
 
   bool get isLoading => state.isLoading;
+
+  void selectRecord(int index, bool? value) {
+    _records[index] = _records[index].copyWith(selected: value);
+    state = AsyncValue.data(_records);
+  }
 }
 
 final diskUsageNotifier =
