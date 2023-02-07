@@ -5,8 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 import '../async_value_widget.dart';
-import '../data/disk_usage_record.dart';
-import '../data/disk_usage_repository.dart';
 import '../providers/providers.dart';
 
 class HomePage extends ConsumerWidget {
@@ -15,7 +13,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appState = ref.watch(appNotifier);
-    final diskUsageChange = ref.watch(diskUsageChangeStreamProvider); 
+    final diskUsageAsyncValue = ref.watch(diskUsageNotifier); 
     return Builder(
       builder: (context) {
         return MacosScaffold(
@@ -46,13 +44,18 @@ class HomePage extends ConsumerWidget {
                       if (selectedDirectory != null) {
                         ref.read(appNotifier.notifier).setCurrentDirectory(
                             directoryPath: selectedDirectory);
+                        ref
+                            .read(diskUsageNotifier.notifier)
+                            .scan(selectedDirectory);
                       }
                     },
                   ),
                   MacosPulldownMenuItem(
                     title: const Text("Scan Directory"),
                     onTap: () {
-                      ref.read(appNotifier.notifier).scanDirectory();
+                      ref
+                          .read(diskUsageNotifier.notifier)
+                          .scan(appState.currentDirectory);
                     },
                   ),
                 ],
@@ -62,16 +65,20 @@ class HomePage extends ConsumerWidget {
           children: [
             ContentArea(
               builder: (context) {
-                return AsyncValueWidget<List<DiskUsageRecord>>(
-                  value: diskUsageChange,
-                  data: (records) => records.isEmpty
-                      ? Center(
-                          child: Text(
-                            'No build folder found',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                        )
-                      : ListView.builder(
+                return diskUsageAsyncValue.when(
+                    error: (e, st) =>
+                        Center(child: ErrorMessageWidget(e.toString())),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    data: (records) {
+                      if (records == null) {
+                        return const Center(child: Text('Not yet scanned'));
+                      }
+                      if (records.isEmpty) {
+                        return const Center(
+                            child: Text('No directories found'));
+                      }
+                      return ListView.builder(
                           itemCount: records.length,
                           itemBuilder: (_, index) {
                             final record = records[index];
@@ -83,7 +90,8 @@ class HomePage extends ConsumerWidget {
                               ),
                             );
                           },
-                        ),
+                      );
+                    }
                 );
               },
             ),

@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as p;
 
-import 'disk_usage_record.dart';
-import 'in_memory_store.dart';
+import '../data/disk_usage_record.dart';
+import '../data/in_memory_store.dart';
 
 // find . -type d -name "build" -size +100cM -exec du -s -k  {}  \;
 class DiskUsageRepository {
@@ -61,7 +61,7 @@ class DiskUsageRepository {
     return null;
   }
 
-  Future<void> scanDiskUsage(String directoryPath) async {
+  Future<List<DiskUsageRecord>> scanDiskUsage(String directoryPath) async {
     _usageData.value = [];
     final discUsageLines = await getDiskUsage(
       directoryPath,
@@ -76,6 +76,7 @@ class DiskUsageRepository {
         .cast<DiskUsageRecord>()
         .toList();
     _usageData.value = records;
+    return records;
   }
 
   void dispose() => _usageData.close();
@@ -85,10 +86,4 @@ final diskUsageRepositoryProvider = Provider<DiskUsageRepository>((ref) {
   final diskUsageRepository = DiskUsageRepository();
   ref.onDispose(() => diskUsageRepository.dispose());
   return diskUsageRepository;
-});
-
-final diskUsageChangeStreamProvider =
-    StreamProvider<List<DiskUsageRecord>>((ref) {
-  final authRepository = ref.watch(diskUsageRepositoryProvider);
-  return authRepository.usageDataChanges();
 });

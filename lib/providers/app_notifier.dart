@@ -2,7 +2,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../data/disk_usage_repository.dart';
+import 'disk_usage_notifier.dart';
+import 'disk_usage_repository.dart';
 import 'providers.dart';
 
 class AppState {
