@@ -63,9 +63,6 @@ class AppNotifier extends Notifier<AppState> {
     debugPrint('setDefaultDirectory: $directoryPath');
   }
 
-  Future<void> scanDirectory() {
-    return _diskUsageRepository.scanDiskUsage(state.currentDirectory);
-  }
 }
 
 final appNotifier = NotifierProvider<AppNotifier, AppState>(AppNotifier.new);

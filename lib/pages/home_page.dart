@@ -28,8 +28,8 @@ class HomePage extends ConsumerWidget {
                 MacosWindowScope.of(context).toggleSidebar();
               },
             ),
-            title: Text('Scanned Folder: ${appState.currentDirectory}'),
-            titleWidth: 500,
+            title: const Text('Scan Result'),
+            titleWidth: 100,
             actions: [
               ToolBarPullDownButton(
                 label: "Actions",
@@ -65,41 +65,72 @@ class HomePage extends ConsumerWidget {
           children: [
             ContentArea(
               builder: (context) {
-                return diskUsageAsyncValue.when(
-                    error: (e, st) =>
-                        Center(child: ErrorMessageWidget(e.toString())),
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    data: (records) {
-                      if (records == null) {
-                        return const Center(child: Text('Not yet scanned'));
-                      }
-                      if (records.isEmpty) {
-                        return const Center(
-                            child: Text('No directories found'));
-                      }
-                      return ListView.builder(
-                          itemCount: records.length,
-                          itemBuilder: (_, index) {
-                            final record = records[index];
-                            return Material(
-                            child: CheckboxListTile(
-                              value: record.selected,
-                                title: Text(
-                                  record.directoryPath,
-                                ),
-                              subtitle: Text('${record.size.toString()} kb'),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              onChanged: (bool? value) {
-                                ref
-                                    .read(diskUsageNotifier.notifier)
-                                    .selectRecord(index, value);
+                return Column(
+                  children: [
+                    Container(
+                      color: Colors.blueGrey[100],
+                      padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text('Scanned Directory: '),
+                          Text(appState.currentDirectory),
+                          const Spacer(),
+                          PushButton(
+                              buttonSize: ButtonSize.large,
+                              isSecondary: true,
+                              color: Colors.white,
+                              child: const Text('Delete selected Directories'),
+                              onPressed: () => ref
+                                  .read(diskUsageNotifier.notifier)
+                                  .deleteSelectedDirectories()),
+                          // Text(
+                          //     '${state.fileCount}|${state.primaryHitCount}|${state.secondaryHitCount}'),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: diskUsageAsyncValue.when(
+                          error: (e, st) =>
+                              Center(child: ErrorMessageWidget(e.toString())),
+                          loading: () =>
+                              const Center(child: CircularProgressIndicator()),
+                          data: (records) {
+                            if (records == null) {
+                              return const Center(
+                                  child: Text('Not yet scanned'));
+                            }
+                            if (records.isEmpty) {
+                              return const Center(
+                                  child: Text('No directories found'));
+                            }
+                            return ListView.builder(
+                              itemCount: records.length,
+                              itemBuilder: (_, index) {
+                                final record = records[index];
+                                return Material(
+                                  child: CheckboxListTile(
+                                    value: record.selected,
+                                    title: Text(
+                                      record.directoryPath,
+                                    ),
+                                    subtitle:
+                                        Text('${record.size.toString()} kb'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    onChanged: (bool? value) {
+                                      ref
+                                          .read(diskUsageNotifier.notifier)
+                                          .selectRecord(index, value);
+                                    },
+                                  ),
+                                );
                               },
-                              ),
                             );
-                          },
-                      );
-                    }
+                          }
+                      ),
+                    ),
+                  ],
                 );
               },
             ),

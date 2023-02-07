@@ -21,11 +21,11 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
   }
 
   Future<void> scan(String directory) async {
+    _records.clear();
     state = const AsyncValue.loading();
     state = await AsyncResult.guard(
       () => _diskUsageRepository.scanDiskUsage(directory),
     );
-    _records.clear();
     _records.addAll(state.value ?? []);
   }
 
@@ -35,6 +35,12 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
     _records[index] = _records[index].copyWith(selected: value);
     state = AsyncValue.data(_records);
   }
+
+  deleteSelectedDirectories() {
+    debugPrint('deleteSelectedDirectories');
+  }
+
+
 }
 
 final diskUsageNotifier =
