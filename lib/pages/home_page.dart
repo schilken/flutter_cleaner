@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cleaner/extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
@@ -133,7 +134,7 @@ class HomePage extends ConsumerWidget {
                                       record.directoryPath,
                                     ),
                                     subtitle:
-                                        Text('${record.size.toString()} kb'),
+                                        Text(record.size.toMegaBytes),
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
                                     onChanged: (bool? value) {
