@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path/path.dart' as p;
 
 import '../data/disk_usage_record.dart';
 import 'disk_usage_repository.dart';
@@ -36,13 +38,36 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
     state = AsyncValue.data(_records);
   }
 
-  deleteSelectedDirectories() {
+  Future<String> deleteSelectedDirectories() async {
     debugPrint('deleteSelectedDirectories');
     final directoriesToDelete =
         _records.where((r) => r.isSelected).map((r) => r.directoryPath);
-    directoriesToDelete.forEach((directory) {
-      print('delete $directory');
-    });
+    final baseDirectory = _diskUsageRepository.currentDirectory;
+    if (baseDirectory == null) {
+      return 'No base directory configured.';
+    }
+    final allFiles = directoriesToDelete.length;
+    var deletedFiles = 0;
+    for (final subDirectory in directoriesToDelete) {
+      final fullPath = p.join(baseDirectory, subDirectory);
+      final exitCode = await moveToTrash(fullPath);
+      if (exitCode == 0) {
+        deletedFiles++;
+      }
+    }
+    scan(baseDirectory);
+    return '$deletedFiles of $allFiles deleted';
+  }
+
+// osascript -e "tell application \"Finder\" to delete POSIX file \"${PWD}/${InputFile}\""
+  Future<int> moveToTrash(String pathName) async {
+    var process = await Process.run('osascript',
+        ['-e', 'tell application "Finder" to delete POSIX file "$pathName"']);
+    if (process.exitCode != 0) {
+      debugPrint('moveToTrash failed:');
+      debugPrint(process.stderr);
+    }
+    return process.exitCode;
   }
 
 }

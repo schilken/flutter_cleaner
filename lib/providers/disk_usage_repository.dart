@@ -3,12 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:path/path.dart' as p;
 
 import '../data/disk_usage_record.dart';
 
 // find . -type d -name "build" -size +100cM -exec du -s -k  {}  \;
 class DiskUsageRepository {
+
+  String? currentDirectory;
 
   Future<List<String>> getDiskUsage(String directory) async {
     const executable = 'find';
@@ -56,6 +57,7 @@ class DiskUsageRepository {
   }
 
   Future<List<DiskUsageRecord>> scanDiskUsage(String directoryPath) async {
+    currentDirectory = directoryPath;
     final discUsageLines = await getDiskUsage(
       directoryPath,
     );

@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,14 +86,21 @@ class HomePage extends ConsumerWidget {
                           PushButton(
                               buttonSize: ButtonSize.large,
                               isSecondary: true,
-                              color: Colors.white,
+                            color: Colors.white,
+                            onPressed: selectedRecordCount == 0
+                                ? null
+                                : () async {
+                                    final result = await ref
+                                        .read(diskUsageNotifier.notifier)
+                                        .deleteSelectedDirectories();
+                                    BotToast.showText(
+                                      text: result,
+                                      duration: const Duration(seconds: 3),
+                                      align: const Alignment(0, 0.3),
+                                    );
+                                  },
                             child: Text(
                                 'Delete selected $selectedRecordCount Directories'),
-                            onPressed: selectedRecordCount > 0
-                                ? () => ref
-                                  .read(diskUsageNotifier.notifier)
-                                    .deleteSelectedDirectories()
-                                : null,
                           ),
                           // Text(
                           //     '${state.fileCount}|${state.primaryHitCount}|${state.secondaryHitCount}'),
