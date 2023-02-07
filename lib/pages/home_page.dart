@@ -28,8 +28,8 @@ class HomePage extends ConsumerWidget {
                 MacosWindowScope.of(context).toggleSidebar();
               },
             ),
-            title: Text('Home Version ${appState.appVersion}'),
-            titleWidth: 250,
+            title: Text('Scanned Folder: ${appState.currentDirectory}'),
+            titleWidth: 500,
             actions: [
               ToolBarPullDownButton(
                 label: "Actions",
@@ -87,6 +87,7 @@ class HomePage extends ConsumerWidget {
                                 title: Text(
                                   record.directoryPath,
                                 ),
+                              subtitle: Text('${record.size.toString()} kb'),
                               ),
                             );
                           },

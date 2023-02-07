@@ -39,7 +39,7 @@ class _MainViewState extends State<MainView> {
           items: const [
             SidebarItem(
               leading: MacosIcon(CupertinoIcons.home),
-              label: Text('Home'),
+              label: Text('Scan Result'),
             ),
             SidebarItem(
               leading: MacosIcon(CupertinoIcons.gear),
