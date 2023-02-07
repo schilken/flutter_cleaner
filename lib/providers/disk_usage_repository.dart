@@ -67,7 +67,7 @@ class DiskUsageRepository {
         .whereType<DiskUsageRecord>()
         .cast<DiskUsageRecord>()
         .toList();
-    return records;
+    return records..sort((r1, r2) => r2.size.compareTo(r1.size));
   }
 
 }
