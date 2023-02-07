@@ -41,10 +41,10 @@ class _MainViewState extends State<MainView> {
               leading: MacosIcon(CupertinoIcons.home),
               label: Text('Scan Result'),
             ),
-            SidebarItem(
-              leading: MacosIcon(CupertinoIcons.gear),
-              label: Text('Settings'),
-            ),
+            // SidebarItem(
+            //   leading: MacosIcon(CupertinoIcons.gear),
+            //   label: Text('Settings'),
+            // ),
           ],
         ),
       ),
@@ -52,7 +52,7 @@ class _MainViewState extends State<MainView> {
         index: _pageIndex,
         children: const [
           HomePage(),
-          SettingsPage(),
+//          SettingsPage(),
         ],
       ),
     );

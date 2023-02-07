@@ -1,23 +1,25 @@
 # flutter_cleaner
 
-A starter Flutter app for macOS with `macos_ui`.
+This Flutter app for macOS lists all build folders with their size. 
+Build folders can grow above 500 MB up to 1 GB!
+It's easy to delete all selected folders to make space on the disk.
 
-## Getting Started
 
-This project is a starting point for a Flutter tool targeting macOS.
+## Getting started
+Create your own version if you have Flutter installed on macOS anyway.
 
-It provides a Flutter application that:
-* Targets macOS (support for other platforms can be added manually)
-* Has these packages pre-installed
-  * `macos_ui` 
-  * `flutter_hooks`
-  * `hooks_riverpod`
-  * `shared_preferences`
-  * `file_picker`
-  * `pubspec_parse`
-* Builds basic UI based on the latest version of `macos_ui` 
-* Provides a `ToolBarPullDownButton` in the `ToolBar` with two menu items
- * `Choose Folder` which opens a FilePicker
- * `Scan Directory`which calls a method on `AppNotifier`
-* Reads the current version from the pubspec.yaml and provides it in the `AppState`
+```
+git clone github.com/schilken/flutter_cleaner
+flutter pub get
+flutter build macos
+```
+You find the built app here: `flutter_cleaner/build/macos/Build/Products/Release/Flutter Cleaner`
 
+## Download a release from github
+(coming soon)
+
+## Making of this app or similar tools
+I generated a starter project using mason. If you want to create a similar tool you can generate a starter project like so:
+- Open https://brickhub.dev
+- Search for macosui_tool_starter
+- Follow the steps on the Usage page  

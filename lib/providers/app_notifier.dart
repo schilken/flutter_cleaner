@@ -59,6 +59,7 @@ class AppNotifier extends Notifier<AppState> {
   }
 
   void setCurrentDirectory({required String directoryPath}) {
+    _preferencesRepository.setCurrentDirectory(directoryPath);
     state = state.copyWith(currentDirectory: directoryPath);
     debugPrint('setDefaultDirectory: $directoryPath');
   }
