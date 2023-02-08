@@ -127,28 +127,9 @@ class ScanPageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = ref.watch(appNotifier);
-    final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
-    final selectedRecordCount = diskUsageAsyncValue.maybeMap<int>(
-        data: (data) {
-          final records = data.value ?? [];
-          return records.where((r) => r.isSelected).length;
-        },
-        orElse: () => 0);
-    final totalSize = diskUsageAsyncValue.maybeMap<int>(
-        data: (data) {
-          final records = data.value ?? [];
-          return records.fold(0, (sum, r) => sum + r.size);
-        },
-        orElse: () => 0);
-
-    final selectedSize = diskUsageAsyncValue.maybeMap<int>(
-        data: (data) {
-          final records = data.value ?? [];
-          return records
-              .where((r) => r.isSelected)
-              .fold(0, (sum, r) => sum + r.size);
-        },
-        orElse: () => 0);
+    final selectedRecordCount = ref.watch(selectedRecordCountProvider);
+    final totalSize = ref.watch(totalSizeProvider);
+    final selectedSize = ref.watch(selectedSizeProvider);
     return Container(
       color: Colors.blueGrey[100],
       padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),

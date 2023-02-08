@@ -76,3 +76,35 @@ final diskUsageNotifier =
     AsyncNotifierProvider<DiskUsageNotifier, List<DiskUsageRecord>?>(() {
   return DiskUsageNotifier();
 });
+
+final selectedRecordCountProvider = Provider<int>((ref) {
+  final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
+  return diskUsageAsyncValue.maybeMap<int>(
+      data: (data) {
+        final records = data.value ?? [];
+        return records.where((r) => r.isSelected).length;
+      },
+      orElse: () => 0);
+});
+
+final totalSizeProvider = Provider<int>((ref) {
+  final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
+  return diskUsageAsyncValue.maybeMap<int>(
+      data: (data) {
+        final records = data.value ?? [];
+        return records.fold(0, (sum, r) => sum + r.size);
+      },
+      orElse: () => 0);
+});
+
+final selectedSizeProvider = Provider<int>((ref) {
+  final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
+  return diskUsageAsyncValue.maybeMap<int>(
+      data: (data) {
+        final records = data.value ?? [];
+        return records
+            .where((r) => r.isSelected)
+            .fold(0, (sum, r) => sum + r.size);
+      },
+      orElse: () => 0);
+});
