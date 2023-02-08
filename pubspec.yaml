@@ -35,4 +35,4 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - pubspec.yaml
+  - pubspec.yaml
