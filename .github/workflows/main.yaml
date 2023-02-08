@@ -97,7 +97,7 @@ jobs:
           type: 'zip'
           filename: FlutterCleaner-${{github.ref_name}}-macos.zip
           directory: build/macos/Build/Products/Release/
-          path: 'Flutter\ Cleaner.app'
+          path: 'FlutterCleaner.app'
           custom: -y
       - name: macOS Release
         uses: softprops/action-gh-release@v1
