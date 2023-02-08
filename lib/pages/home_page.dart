@@ -113,7 +113,7 @@ class HomePage extends ConsumerWidget {
                           error: (e, st) =>
                               Center(child: ErrorMessageWidget(e.toString())),
                           loading: () =>
-                              const Center(child: CircularProgressIndicator()),
+                              const Center(child: ProgressCircle(radius: 30)),
                           data: (records) {
                             if (records == null) {
                               return const Center(
