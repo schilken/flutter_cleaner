@@ -24,48 +24,11 @@ class HomePage extends ConsumerWidget {
       builder: (context) {
         return MacosScaffold(
           toolBar: ToolBar(
-            leading: MacosIconButton(
-              icon: const MacosIcon(
-                CupertinoIcons.sidebar_left,
-                size: 40,
-                color: CupertinoColors.black,
-              ),
-              onPressed: () {
-                MacosWindowScope.of(context).toggleSidebar();
-              },
-            ),
+            leading: const ToggleSidebarButton(),
             title: const Text('Scan Result'),
             titleWidth: 100,
             actions: [
-              ToolBarPullDownButton(
-                label: "Actions",
-                icon: CupertinoIcons.ellipsis_circle,
-                tooltipMessage: "Perform tasks with the selected items",
-                items: [
-                  MacosPulldownMenuItem(
-                    title: const Text("Choose Folder"),
-                    onTap: () async {
-                      String? selectedDirectory =
-                          await FilePicker.platform.getDirectoryPath();
-                      if (selectedDirectory != null) {
-                        ref.read(appNotifier.notifier).setCurrentDirectory(
-                            directoryPath: selectedDirectory);
-                        ref
-                            .read(diskUsageNotifier.notifier)
-                            .scan(selectedDirectory);
-                      }
-                    },
-                  ),
-                  MacosPulldownMenuItem(
-                    title: const Text("Scan Directory"),
-                    onTap: () {
-                      ref
-                          .read(diskUsageNotifier.notifier)
-                          .scan(appState.currentDirectory);
-                    },
-                  ),
-                ],
-              ),
+              createToolBarPullDownButton(ref, appState.currentDirectory),
             ],
           ),
           children: [
@@ -75,11 +38,8 @@ class HomePage extends ConsumerWidget {
                   children: [
                     ScanPageHeader(ref: ref),
                     Expanded(
-                      child: diskUsageAsyncValue.when(
-                          error: (e, st) =>
-                              Center(child: ErrorMessageWidget(e.toString())),
-                          loading: () =>
-                              const Center(child: ProgressCircle(radius: 30)),
+                      child: AsyncValueWidget(
+                          value: diskUsageAsyncValue,
                           data: (records) {
                             if (records == null) {
                               return const Center(
@@ -98,6 +58,26 @@ class HomePage extends ConsumerWidget {
             ),
           ],
         );
+      },
+    );
+  }
+}
+
+class ToggleSidebarButton extends StatelessWidget {
+  const ToggleSidebarButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MacosIconButton(
+      icon: const MacosIcon(
+        CupertinoIcons.sidebar_left,
+        size: 40,
+        color: CupertinoColors.black,
+      ),
+      onPressed: () {
+        MacosWindowScope.of(context).toggleSidebar();
       },
     );
   }
@@ -202,4 +182,35 @@ class ScanPageHeader extends StatelessWidget {
       ),
     );
   }
+}
+
+// can't us a StatelessWidget because ToolBarPullDownButton isn't a widget
+ToolBarPullDownButton createToolBarPullDownButton(
+    WidgetRef ref, String currentDirectory) {
+  return ToolBarPullDownButton(
+    label: "Actions",
+    icon: CupertinoIcons.ellipsis_circle,
+    tooltipMessage: "Perform tasks with the selected items",
+    items: [
+      MacosPulldownMenuItem(
+        title: const Text("Choose Folder"),
+        onTap: () async {
+          String? selectedDirectory =
+              await FilePicker.platform.getDirectoryPath();
+          if (selectedDirectory != null) {
+            ref
+                .read(appNotifier.notifier)
+                .setCurrentDirectory(directoryPath: selectedDirectory);
+            ref.read(diskUsageNotifier.notifier).scan(selectedDirectory);
+          }
+        },
+      ),
+      MacosPulldownMenuItem(
+        title: const Text("Scan Directory"),
+        onTap: () {
+          ref.read(diskUsageNotifier.notifier).scan(currentDirectory);
+        },
+      ),
+    ],
+  );
 }

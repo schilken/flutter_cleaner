@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:macos_ui/macos_ui.dart';
 
 class AsyncValueWidget<T> extends StatelessWidget {
   const AsyncValueWidget({super.key, required this.value, required this.data});
@@ -11,7 +12,7 @@ class AsyncValueWidget<T> extends StatelessWidget {
     return value.when(
       data: data,
       error: (e, st) => Center(child: ErrorMessageWidget(e.toString())),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const Center(child: ProgressCircle(radius: 30)),
     );
   }
 }
