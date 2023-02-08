@@ -15,6 +15,8 @@ flutter build macos
 ```
 You find the built app here: `flutter_cleaner/build/macos/Build/Products/Release/Flutter Cleaner`
 
+<img src="assets_for_readme/Flutter Cleaner Screenshot.png"/>
+
 ## Download a release from github
 (coming soon)
 
