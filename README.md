@@ -22,4 +22,7 @@ You find the built app here: `flutter_cleaner/build/macos/Build/Products/Release
 I generated a starter project using mason. If you want to create a similar tool you can generate a starter project like so:
 - Open https://brickhub.dev
 - Search for macosui_tool_starter
-- Follow the steps on the Usage page  
+- Follow the steps on the Usage page
+
+## Credits
+Several ideas are taken from https://github.com/bizz84/complete-flutter-course, a great source for learning advanced Flutter created by Andrea Bizzotto (bizz84). Also, thanks to Reuben Turner (GroovinChip) for his great package at https://github.com/GroovinChip/macos_ui
