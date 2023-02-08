@@ -22,6 +22,22 @@ class HomePage extends ConsumerWidget {
           return records.where((r) => r.isSelected).length;
         },
         orElse: () => 0);
+    final totalSize = diskUsageAsyncValue.maybeMap<int>(
+        data: (data) {
+          final records = data.value ?? [];
+          return records.fold(0, (sum, r) => sum + r.size);
+        },
+        orElse: () => 0);
+
+    final selectedSize = diskUsageAsyncValue.maybeMap<int>(
+        data: (data) {
+          final records = data.value ?? [];
+          return records
+              .where((r) => r.isSelected)
+              .fold(0, (sum, r) => sum + r.size);
+        },
+        orElse: () => 0);
+
     return Builder(
       builder: (context) {
         return MacosScaffold(
@@ -82,8 +98,11 @@ class HomePage extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           const Text('Scanned Directory: '),
-                          Text(appState.currentDirectory),
-                          const Spacer(),
+                          Expanded(child: Text(appState.currentDirectory)),
+                          const SizedBox(width: 8),
+                          Text(
+                              '${totalSize.toMegaBytes} - ${selectedSize.toMegaBytes}'),
+                          const SizedBox(width: 8),
                           PushButton(
                               buttonSize: ButtonSize.large,
                               isSecondary: true,
@@ -101,10 +120,8 @@ class HomePage extends ConsumerWidget {
                                     );
                                   },
                             child: Text(
-                                'Delete selected $selectedRecordCount Directories'),
+                                'Delete $selectedRecordCount Directories'),
                           ),
-                          // Text(
-                          //     '${state.fileCount}|${state.primaryHitCount}|${state.secondaryHitCount}'),
                         ],
                       ),
                     ),
@@ -159,3 +176,4 @@ class HomePage extends ConsumerWidget {
     );
   }
 }
+
