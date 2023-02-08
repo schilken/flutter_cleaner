@@ -77,6 +77,7 @@ final diskUsageNotifier =
   return DiskUsageNotifier();
 });
 
+// these providers are inspired by https://github.com/bizz84/complete-flutter-course
 final selectedRecordCountProvider = Provider<int>((ref) {
   final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
   return diskUsageAsyncValue.maybeMap<int>(

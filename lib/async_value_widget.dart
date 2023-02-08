@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
+// taken from https://github.com/bizz84/complete-flutter-course
 class AsyncValueWidget<T> extends StatelessWidget {
   const AsyncValueWidget({super.key, required this.value, required this.data});
   final AsyncValue<T> value;
