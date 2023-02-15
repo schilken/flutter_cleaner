@@ -25,7 +25,7 @@ class HomePage extends ConsumerWidget {
         return MacosScaffold(
           toolBar: ToolBar(
             leading: const ToggleSidebarButton(),
-            title: const Text('Scan Result'),
+            title: const Text('Result Page'),
             titleWidth: 100,
             actions: [
               createToolBarPullDownButton(ref, appState.currentDirectory),
@@ -33,7 +33,7 @@ class HomePage extends ConsumerWidget {
           ),
           children: [
             ContentArea(
-              builder: (context) {
+              builder: (context, _) {
                 return Column(
                   children: [
                     ScanPageHeader(ref: ref),

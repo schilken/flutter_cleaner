@@ -1,7 +1,7 @@
 name: flutter_cleaner
 description: A tool to delete obsolete build folders
 publish_to: "none"
-version: 0.1.0+1
+version: 0.2.0
 
 environment:
   sdk: ">=2.19.0 <3.0.0"
@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
   flutter_hooks: ^0.18.5+1
   hooks_riverpod: ^2.1.3
-  macos_ui: ^1.9.1
+  macos_ui: ^1.10.0
   path: ^1.8.2
   pubspec_parse: ^1.2.1
   rxdart: ^0.27.7

@@ -28,7 +28,7 @@ class SettingsPage extends ConsumerWidget {
           ),
           children: [
             ContentArea(
-              builder: (context) {
+              builder: (context, _) {
                 return Center(
                   child: Text('Settings'),
                 );

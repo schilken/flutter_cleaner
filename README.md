@@ -15,10 +15,10 @@ flutter build macos
 ```
 You find the built app here: `flutter_cleaner/build/macos/Build/Products/Release/Flutter Cleaner`
 
-<img src="assets_for_readme/Flutter Cleaner Screenshot.png"/>
+<img src="assets_for_readme/FlutterCleaner Screenshot.png"/>
 
-## Download a release from github
-(coming soon)
+## Download a release from GitHub
+Currrently there is only a releas build for [macOS] (https://github.com/schilken/flutter_cleaner/releases/)
 
 ## Making of this app or similar tools
 I generated a starter project using mason. If you want to create a similar tool you can generate a starter project like so:
