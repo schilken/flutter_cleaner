@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 import '../providers/app_notifier.dart';
+import '../providers/disk_usage_notifier.dart';
 import 'home_page.dart';
 
 class MainView extends ConsumerStatefulWidget {
@@ -15,6 +16,16 @@ class MainView extends ConsumerStatefulWidget {
 
 class _MainViewState extends ConsumerState<MainView> {
   int _pageIndex = 0;
+
+  @override
+  void initState() {
+    Future<void>.delayed(const Duration(milliseconds: 100), () {
+      final currentDirectory = ref.watch(appNotifier).currentDirectory;
+      ref.read(diskUsageNotifier.notifier).scan(currentDirectory);
+    });
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
