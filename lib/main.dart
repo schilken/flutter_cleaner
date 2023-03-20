@@ -15,12 +15,17 @@ Future<void> main() async {
   final pubspec = Pubspec.parse(await rootBundle.loadString('pubspec.yaml'));
   final version = pubspec.version;
   debugPrint('version from pubspec.yaml: $version');
-  sharedPreferences.setString('appVersion', version.toString());
+  await sharedPreferences.setString('appVersion', version.toString());
+  final container = ProviderContainer(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    ],
+//    observers: [AsyncErrorLogger()],
+  );
+
   runApp(
-    ProviderScope(
-      overrides: [
-        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      ],
+    UncontrolledProviderScope(
+      container: container,
       child: const MainApp(),
     ),
   );

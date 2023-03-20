@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'providers.dart';
 
 class PreferencesRepository {
-  final SharedPreferences _prefs;
 
   PreferencesRepository(this._prefs);
+  final SharedPreferences _prefs;
 
   String get appVersion => _prefs.getString('appVersion') ?? '?';
 

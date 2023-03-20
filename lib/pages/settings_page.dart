@@ -9,6 +9,8 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // trigger new build when appState changes
+    // ignore: unused_local_variable
     final appState = ref.watch(appNotifier);
     return Builder(
       builder: (context) {
@@ -24,12 +26,12 @@ class SettingsPage extends ConsumerWidget {
                 MacosWindowScope.of(context).toggleSidebar();
               },
             ),
-            title: Text('Settings'),
+            title: const Text('Settings'),
           ),
           children: [
             ContentArea(
               builder: (context, _) {
-                return Center(
+                return const Center(
                   child: Text('Settings'),
                 );
               },

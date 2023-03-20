@@ -55,21 +55,22 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
         deletedFiles++;
       }
     }
-    scan(baseDirectory);
+    await scan(baseDirectory);
     return '$deletedFiles of $allFiles deleted';
   }
 
 // osascript -e "tell application \"Finder\" to delete POSIX file \"${PWD}/${InputFile}\""
   Future<int> moveToTrash(String pathName) async {
-    var process = await Process.run('osascript',
-        ['-e', 'tell application "Finder" to delete POSIX file "$pathName"']);
+    final process = await Process.run(
+      'osascript',
+      ['-e', 'tell application "Finder" to delete POSIX file "$pathName"'],
+    );
     if (process.exitCode != 0) {
       debugPrint('moveToTrash failed:');
-      debugPrint(process.stderr);
+      debugPrint(process.stderr as String);
     }
     return process.exitCode;
   }
-
 }
 
 final diskUsageNotifier =
@@ -85,7 +86,8 @@ final selectedRecordCountProvider = Provider<int>((ref) {
         final records = data.value ?? [];
         return records.where((r) => r.isSelected).length;
       },
-      orElse: () => 0);
+    orElse: () => 0,
+  );
 });
 
 final totalSizeProvider = Provider<int>((ref) {
@@ -95,7 +97,8 @@ final totalSizeProvider = Provider<int>((ref) {
         final records = data.value ?? [];
         return records.fold(0, (sum, r) => sum + r.size);
       },
-      orElse: () => 0);
+    orElse: () => 0,
+  );
 });
 
 final selectedSizeProvider = Provider<int>((ref) {
@@ -107,5 +110,6 @@ final selectedSizeProvider = Provider<int>((ref) {
             .where((r) => r.isSelected)
             .fold(0, (sum, r) => sum + r.size);
       },
-      orElse: () => 0);
+    orElse: () => 0,
+  );
 });

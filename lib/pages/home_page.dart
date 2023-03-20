@@ -3,13 +3,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cleaner/data/disk_usage_record.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
-import 'package:flutter_cleaner/extensions.dart';
-
 import '../async_value_widget.dart';
+import '../data/disk_usage_record.dart';
+import '../extensions.dart';
 import '../providers/providers.dart';
 
 class HomePage extends ConsumerWidget {
@@ -43,14 +42,17 @@ class HomePage extends ConsumerWidget {
                           data: (records) {
                             if (records == null) {
                               return const Center(
-                                  child: Text('Not yet scanned'));
+                              child: Text('Not yet scanned'),
+                            );
                             }
                             if (records.isEmpty) {
                               return const Center(
-                                  child: Text('No directories found'));
+                              child: Text('No directories found'),
+                            );
                             }
                             return RecordsView(records, ref);
-                          }),
+                        },
+                      ),
                     ),
                   ],
                 );
@@ -106,7 +108,7 @@ class RecordsView extends StatelessWidget {
             ),
             subtitle: Text(record.size.toMegaBytes),
             controlAffinity: ListTileControlAffinity.leading,
-            onChanged: (bool? value) {
+            onChanged: (value) {
               ref.read(diskUsageNotifier.notifier).selectRecord(index, value);
             },
           ),
@@ -134,7 +136,6 @@ class ScanPageHeader extends StatelessWidget {
       color: Colors.blueGrey[100],
       padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Scanned Directory: '),
           Expanded(child: Text(appState.currentDirectory)),
@@ -167,16 +168,18 @@ class ScanPageHeader extends StatelessWidget {
 
 // can't us a StatelessWidget because ToolBarPullDownButton isn't a widget
 ToolBarPullDownButton createToolBarPullDownButton(
-    WidgetRef ref, String currentDirectory) {
+  WidgetRef ref,
+  String currentDirectory,
+) {
   return ToolBarPullDownButton(
-    label: "Actions",
+    label: 'Actions',
     icon: CupertinoIcons.ellipsis_circle,
-    tooltipMessage: "Perform tasks with the selected items",
+    tooltipMessage: 'Perform tasks with the selected items',
     items: [
       MacosPulldownMenuItem(
-        title: const Text("Choose Folder"),
+        title: const Text('Choose Folder'),
         onTap: () async {
-          String? selectedDirectory =
+          final selectedDirectory =
               await FilePicker.platform.getDirectoryPath();
           if (selectedDirectory != null) {
             ref
@@ -187,7 +190,7 @@ ToolBarPullDownButton createToolBarPullDownButton(
         },
       ),
       MacosPulldownMenuItem(
-        title: const Text("Scan Directory"),
+        title: const Text('Scan Directory'),
         onTap: () {
           ref.read(diskUsageNotifier.notifier).scan(currentDirectory);
         },

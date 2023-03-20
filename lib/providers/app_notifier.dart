@@ -4,12 +4,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'providers.dart';
 
+@immutable
 class AppState {
-  String message;
-  String appVersion;
-  String currentDirectory;
+  final String message;
+  final String appVersion;
+  final String currentDirectory;
 
-  AppState({
+  const AppState({
     required this.message,
     required this.appVersion,
     required this.currentDirectory,
@@ -59,7 +60,6 @@ class AppNotifier extends Notifier<AppState> {
     state = state.copyWith(currentDirectory: directoryPath);
     debugPrint('setDefaultDirectory: $directoryPath');
   }
-
 }
 
 final appNotifier = NotifierProvider<AppNotifier, AppState>(AppNotifier.new);

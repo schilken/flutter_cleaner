@@ -22,9 +22,11 @@ dependencies:
   shared_preferences: ^2.0.17
 
 dev_dependencies:
+  custom_lint: ^0.3.2
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
+  riverpod_lint: ^1.1.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -35,4 +37,4 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-  - pubspec.yaml
+    - pubspec.yaml

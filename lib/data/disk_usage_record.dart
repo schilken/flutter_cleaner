@@ -1,12 +1,15 @@
+import 'package:flutter/foundation.dart';
+
+@immutable
 class DiskUsageRecord {
-  final String directoryPath;
-  final int size;
-  final bool isSelected;
-  DiskUsageRecord({
+  const DiskUsageRecord({
     required this.directoryPath,
     required this.size,
     required this.isSelected,
   });
+  final String directoryPath;
+  final int size;
+  final bool isSelected;
 
   DiskUsageRecord copyWith({
     String? directoryPath,

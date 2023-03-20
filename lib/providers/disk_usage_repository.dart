@@ -8,10 +8,9 @@ import '../data/disk_usage_record.dart';
 
 // find . -type d -name "build" -size +100cM -exec du -s -k  {}  \;
 class DiskUsageRepository {
-
   String? currentDirectory;
 
-  Future<List<String>> getDiskUsage(String directory) async {
+  Future<List<String>> _getDiskUsage(String directory) async {
     const executable = 'find';
     final arguments = [
       '.',
@@ -35,22 +34,23 @@ class DiskUsageRepository {
       debugPrint('stderr: ${process.stderr}');
       return [];
     } else {
-      final lines = process.stdout.split('\n');
+      final lines = (process.stdout as String).split('\n');
       return lines;
     }
   }
 
-  DiskUsageRecord? parseDiskUsageLine(String line) {
+  DiskUsageRecord? _parseDiskUsageLine(String line) {
     final pattern = RegExp(r'([0-9-]+) *(.+)$');
     final matchLogLine = pattern.matchAsPrefix(line);
     if (matchLogLine != null) {
-      final String? usageInKB = matchLogLine[1];
-      final String? pathName = matchLogLine[2];
+      final usageInKB = matchLogLine[1];
+      final pathName = matchLogLine[2];
       if (usageInKB != null && pathName != null) {
         return DiskUsageRecord(
             directoryPath: pathName.trim().replaceFirst('./', ''),
             size: int.parse(usageInKB),
-            isSelected: false);
+          isSelected: false,
+        );
       }
     }
     return null;
@@ -58,20 +58,19 @@ class DiskUsageRepository {
 
   Future<List<DiskUsageRecord>> scanDiskUsage(String directoryPath) async {
     currentDirectory = directoryPath;
-    final discUsageLines = await getDiskUsage(
+    final discUsageLines = await _getDiskUsage(
       directoryPath,
     );
     // discUsageLines.forEach((element) {
     //   debugPrint(element);
     // });
     final records = discUsageLines
-        .map((line) => parseDiskUsageLine(line))
+        .map(_parseDiskUsageLine)
         .whereType<DiskUsageRecord>()
         .cast<DiskUsageRecord>()
         .toList();
     return records..sort((r1, r2) => r2.size.compareTo(r1.size));
   }
-
 }
 
 final diskUsageRepositoryProvider = Provider<DiskUsageRepository>((ref) {
