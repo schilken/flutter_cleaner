@@ -18,17 +18,15 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appState = ref.watch(appNotifierProvider);
     final diskUsageAsyncValue = ref.watch(diskUsageNotifierProvider);
 
     return Builder(
       builder: (context) {
         return MacosScaffold(
-          toolBar: ToolBar(
-            leading: const ToggleSidebarButton(),
-            title: const Text('Result Page'),
+          toolBar: const ToolBar(
+            leading: ToggleSidebarButton(),
+            title: Text('Result Page'),
             titleWidth: 100,
-            actions: [],
           ),
           children: [
             ContentArea(
@@ -140,6 +138,17 @@ class ScanPageHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
       child: Row(
         children: [
+          Material(
+            child: Checkbox(
+              value: appState.selectAllBox,
+              onChanged: appNotifier.updateChecked,
+              tristate: true,
+            ),
+          ),
+          const SizedBox(
+            width: 18,
+          ),
+
           PushButton(
             buttonSize: ButtonSize.large,
             isSecondary: true,

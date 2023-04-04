@@ -7,40 +7,48 @@ import 'providers.dart';
 
 @immutable
 class AppState {
-  final String message;
   final String appVersion;
   final String currentDirectory;
+  final bool? selectAllBox;
 
   const AppState({
-    required this.message,
     required this.appVersion,
     required this.currentDirectory,
+    this.selectAllBox,
   });
 
   AppState copyWith({
-    String? message,
     String? appVersion,
     String? currentDirectory,
+    bool? checkAllBox,
   }) {
     return AppState(
-      message: message ?? this.message,
       appVersion: appVersion ?? this.appVersion,
       currentDirectory: currentDirectory ?? this.currentDirectory,
+      selectAllBox: checkAllBox,
     );
   }
 
   @override
   bool operator ==(covariant AppState other) {
     if (identical(this, other)) return true;
-
-    return other.message == message;
+  
+    return other.appVersion == appVersion &&
+        other.currentDirectory == currentDirectory &&
+        other.selectAllBox == selectAllBox;
   }
 
   @override
-  int get hashCode => message.hashCode;
+  int get hashCode {
+    return appVersion.hashCode ^
+        currentDirectory.hashCode ^
+        selectAllBox.hashCode;
+  }
 
   @override
-  String toString() => 'AppState(message: $message)';
+  String toString() {
+    return 'AppState(appVersion: $appVersion, currentDirectory: $currentDirectory, selectAllBox: $selectAllBox)';
+  }
 }
 
 class AppNotifier extends Notifier<AppState> {
@@ -50,9 +58,9 @@ class AppNotifier extends Notifier<AppState> {
   AppState build() {
     _preferencesRepository = ref.read(preferencesRepositoryProvider);
     return AppState(
-      message: 'initialized',
       appVersion: _preferencesRepository.appVersion,
       currentDirectory: _preferencesRepository.currentDirectory,
+      selectAllBox: false,
     );
   }
 
@@ -69,6 +77,12 @@ class AppNotifier extends Notifier<AppState> {
       return '/${p.joinAll(parts.sublist(3))}';
     }
     return fullPathName;
+  }
+
+  void updateChecked(bool? value) {
+    debugPrint('updateChecked: $value');
+    state = state.copyWith(checkAllBox: value ?? false);
+    ref.read(diskUsageNotifierProvider.notifier).selectAll(value ?? false);
   }
 }
 
