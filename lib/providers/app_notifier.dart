@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, avoid_print
 import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:path/path.dart' as p;
 
 import 'providers.dart';
 
@@ -56,10 +57,20 @@ class AppNotifier extends Notifier<AppState> {
   }
 
   void setCurrentDirectory({required String directoryPath}) {
-    _preferencesRepository.setCurrentDirectory(directoryPath);
-    state = state.copyWith(currentDirectory: directoryPath);
-    debugPrint('setDefaultDirectory: $directoryPath');
+    final reducedPath = _startWithUsersFolder(directoryPath);
+    _preferencesRepository.setCurrentDirectory(reducedPath);
+    state = state.copyWith(currentDirectory: reducedPath);
+    debugPrint('setDefaultDirectory: $reducedPath');
+  }
+
+  String _startWithUsersFolder(String fullPathName) {
+    final parts = p.split(fullPathName);
+    if (parts.length > 3 && parts[3] == 'Users') {
+      return '/${p.joinAll(parts.sublist(3))}';
+    }
+    return fullPathName;
   }
 }
 
-final appNotifier = NotifierProvider<AppNotifier, AppState>(AppNotifier.new);
+final appNotifierProvider =
+    NotifierProvider<AppNotifier, AppState>(AppNotifier.new);

@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path/path.dart' as p;
 
 import '../data/disk_usage_record.dart';
+import 'app_notifier.dart';
 import 'disk_usage_repository.dart';
 
 typedef AsyncResult = AsyncValue<List<DiskUsageRecord>?>;
@@ -14,15 +15,18 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
   DiskUsageNotifier();
 
   late DiskUsageRepository _diskUsageRepository;
+  late AppState _appState;
   final _records = <DiskUsageRecord>[];
 
   @override
   FutureOr<List<DiskUsageRecord>?> build() async {
     _diskUsageRepository = ref.read(diskUsageRepositoryProvider);
+    _appState = ref.read(appNotifierProvider);
     return null;
   }
 
-  Future<void> scan(String directory) async {
+  Future<void> scan() async {
+    final directory = _appState.currentDirectory;
     _records.clear();
     state = const AsyncValue.loading();
     state = await AsyncResult.guard(
@@ -55,7 +59,7 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
         deletedFiles++;
       }
     }
-    await scan(baseDirectory);
+    await scan();
     return '$deletedFiles of $allFiles deleted';
   }
 
@@ -73,43 +77,43 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
   }
 }
 
-final diskUsageNotifier =
+final diskUsageNotifierProvider =
     AsyncNotifierProvider<DiskUsageNotifier, List<DiskUsageRecord>?>(() {
   return DiskUsageNotifier();
 });
 
 // these providers are inspired by https://github.com/bizz84/complete-flutter-course
 final selectedRecordCountProvider = Provider<int>((ref) {
-  final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
+  final diskUsageAsyncValue = ref.watch(diskUsageNotifierProvider);
   return diskUsageAsyncValue.maybeMap<int>(
-      data: (data) {
-        final records = data.value ?? [];
-        return records.where((r) => r.isSelected).length;
-      },
+    data: (data) {
+      final records = data.value ?? [];
+      return records.where((r) => r.isSelected).length;
+    },
     orElse: () => 0,
   );
 });
 
 final totalSizeProvider = Provider<int>((ref) {
-  final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
+  final diskUsageAsyncValue = ref.watch(diskUsageNotifierProvider);
   return diskUsageAsyncValue.maybeMap<int>(
-      data: (data) {
-        final records = data.value ?? [];
-        return records.fold(0, (sum, r) => sum + r.size);
-      },
+    data: (data) {
+      final records = data.value ?? [];
+      return records.fold(0, (sum, r) => sum + r.size);
+    },
     orElse: () => 0,
   );
 });
 
 final selectedSizeProvider = Provider<int>((ref) {
-  final diskUsageAsyncValue = ref.watch(diskUsageNotifier);
+  final diskUsageAsyncValue = ref.watch(diskUsageNotifierProvider);
   return diskUsageAsyncValue.maybeMap<int>(
-      data: (data) {
-        final records = data.value ?? [];
-        return records
-            .where((r) => r.isSelected)
-            .fold(0, (sum, r) => sum + r.size);
-      },
+    data: (data) {
+      final records = data.value ?? [];
+      return records
+          .where((r) => r.isSelected)
+          .fold(0, (sum, r) => sum + r.size);
+    },
     orElse: () => 0,
   );
 });

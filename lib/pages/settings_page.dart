@@ -11,7 +11,7 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // trigger new build when appState changes
     // ignore: unused_local_variable
-    final appState = ref.watch(appNotifier);
+    final appState = ref.watch(appNotifierProvider);
     return Builder(
       builder: (context) {
         return MacosScaffold(

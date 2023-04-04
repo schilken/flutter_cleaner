@@ -47,8 +47,8 @@ class DiskUsageRepository {
       final pathName = matchLogLine[2];
       if (usageInKB != null && pathName != null) {
         return DiskUsageRecord(
-            directoryPath: pathName.trim().replaceFirst('./', ''),
-            size: int.parse(usageInKB),
+          directoryPath: pathName.trim().replaceFirst('./', ''),
+          size: int.parse(usageInKB),
           isSelected: false,
         );
       }
