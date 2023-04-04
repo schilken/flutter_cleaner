@@ -138,6 +138,9 @@ class ScanPageHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 20, 20, 20),
       child: Row(
         children: [
+          const SizedBox(
+            width: 2,
+          ),
           Material(
             child: Checkbox(
               value: appState.selectAllBox,

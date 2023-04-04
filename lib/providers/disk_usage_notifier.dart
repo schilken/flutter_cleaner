@@ -67,7 +67,7 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
       }
     }
     await scan();
-    return '$deletedFiles of $allFiles deleted';
+    return '$deletedFiles of $allFiles directories moved to trash';
   }
 
 // osascript -e "tell application \"Finder\" to delete POSIX file \"${PWD}/${InputFile}\""
