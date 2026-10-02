@@ -37,14 +37,14 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
 
   void selectRecord(int index, {required bool? value}) {
     _records[index] = _records[index].copyWith(isSelected: value);
-    state = AsyncValue.data(_records);
+    state = AsyncValue.data(List.of(_records));
   }
 
   void selectAll({required bool isSelected}) {
     for (var ix = 0; ix < _records.length; ix++) {
       _records[ix] = _records[ix].copyWith(isSelected: isSelected);
     }
-    state = AsyncValue.data(_records);
+    state = AsyncValue.data(List.of(_records));
   }
 
   Future<String> deleteSelectedDirectories() async {
