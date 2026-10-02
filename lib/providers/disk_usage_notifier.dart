@@ -15,18 +15,16 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
   DiskUsageNotifier();
 
   late DiskUsageRepository _diskUsageRepository;
-  late AppState _appState;
   final _records = <DiskUsageRecord>[];
 
   @override
   FutureOr<List<DiskUsageRecord>?> build() async {
     _diskUsageRepository = ref.read(diskUsageRepositoryProvider);
-    _appState = ref.read(appNotifierProvider);
     return null;
   }
 
   Future<void> scan() async {
-    final directory = _appState.currentDirectory;
+    final directory = ref.read(appNotifierProvider).currentDirectory;
     _records.clear();
     state = const AsyncValue.loading();
     state = await AsyncResult.guard(
