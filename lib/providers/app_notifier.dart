@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, avoid_print
 import 'package:flutter/foundation.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 
 import 'providers.dart';
@@ -79,10 +79,12 @@ class AppNotifier extends Notifier<AppState> {
     return fullPathName;
   }
 
-  void updateChecked(bool? value) {
+  void updateChecked({required bool? value}) {
     debugPrint('updateChecked: $value');
     state = state.copyWith(checkAllBox: value ?? false);
-    ref.read(diskUsageNotifierProvider.notifier).selectAll(value ?? false);
+    ref.read(diskUsageNotifierProvider.notifier).selectAll(
+          isSelected: value ?? false,
+        );
   }
 }
 

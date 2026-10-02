@@ -11,6 +11,9 @@ analyzer:
     included_file_warning: ignore
     # false positive when using Freezed
     invalid_annotation_target: ignore
+  exclude:
+    - build/**
+    - macos/**
 
 linter:
   rules:
@@ -30,10 +33,10 @@ linter:
     no_leading_underscores_for_local_identifiers: false
 
     # false positive
-    one_member_abstracts: false
+    # one_member_abstracts is deprecated and removed in newer Dart SDKs
 
     # too verbose
-    prefer_final_parameters: false
+    # prefer_final_parameters is deprecated and removed in newer Dart SDKs
 
     # Too verbose with little value, and this is taken care of by the Flutter devtool anyway.
     diagnostic_describe_all_properties: false

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 
 import '../data/disk_usage_record.dart';
@@ -37,12 +37,12 @@ class DiskUsageNotifier extends AsyncNotifier<List<DiskUsageRecord>?> {
 
   bool get isLoading => state.isLoading;
 
-  void selectRecord(int index, bool? value) {
+  void selectRecord(int index, {required bool? value}) {
     _records[index] = _records[index].copyWith(isSelected: value);
     state = AsyncValue.data(_records);
   }
 
-  void selectAll(bool isSelected) {
+  void selectAll({required bool isSelected}) {
     for (var ix = 0; ix < _records.length; ix++) {
       _records[ix] = _records[ix].copyWith(isSelected: isSelected);
     }

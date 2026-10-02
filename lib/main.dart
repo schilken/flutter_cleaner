@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +16,10 @@ Future<void> main() async {
   final version = pubspec.version;
   debugPrint('version from pubspec.yaml: $version');
   await sharedPreferences.setString('appVersion', version.toString());
+
+  const config = MacosWindowUtilsConfig();
+  await config.apply();
+
   final container = ProviderContainer(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),

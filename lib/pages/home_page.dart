@@ -5,7 +5,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 import '../async_value_widget.dart';
@@ -109,7 +109,7 @@ class RecordsView extends StatelessWidget {
             onChanged: (value) {
               ref
                   .read(diskUsageNotifierProvider.notifier)
-                  .selectRecord(index, value);
+                  .selectRecord(index, value: value);
             },
           ),
         );
@@ -144,7 +144,7 @@ class ScanPageHeader extends StatelessWidget {
           Material(
             child: Checkbox(
               value: appState.selectAllBox,
-              onChanged: appNotifier.updateChecked,
+              onChanged: (value) => appNotifier.updateChecked(value: value),
               tristate: true,
             ),
           ),
@@ -153,19 +153,20 @@ class ScanPageHeader extends StatelessWidget {
           ),
 
           PushButton(
-            buttonSize: ButtonSize.large,
-            isSecondary: true,
+            controlSize: ControlSize.large,
+            secondary: true,
             color: Colors.white,
             child: const Text('Choose Folder to scan'),
             onPressed: () async {
               final userHomeDirectory = Platform.environment['HOME'];
-              final selectedDirectory = await FilePicker.platform
-                  .getDirectoryPath(initialDirectory: userHomeDirectory);
+              final selectedDirectory = await FilePicker.getDirectoryPath(
+                initialDirectory: userHomeDirectory,
+              );
               if (selectedDirectory != null) {
                 appNotifier.setCurrentDirectory(
                   directoryPath: selectedDirectory,
                 );
-                ref.read(diskUsageNotifierProvider.notifier).scan();
+                await ref.read(diskUsageNotifierProvider.notifier).scan();
               }
             },
           ),
@@ -187,8 +188,8 @@ class ScanPageHeader extends StatelessWidget {
           Text('${totalSize.toMegaBytes} - ${selectedSize.toMegaBytes}'),
           const SizedBox(width: 8),
           PushButton(
-            buttonSize: ButtonSize.large,
-            isSecondary: true,
+            controlSize: ControlSize.large,
+            secondary: true,
             color: Colors.white,
             onPressed: selectedRecordCount == 0
                 ? null

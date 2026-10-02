@@ -97,7 +97,7 @@ linter:
     - null_check_on_nullable_type_parameter
     - null_closures
     - omit_local_variable_types
-    - one_member_abstracts
+    # one_member_abstracts  # deprecated in newer Dart SDKs
     - only_throw_errors
     - overridden_fields
     - package_api_docs
@@ -121,7 +121,7 @@ linter:
     - prefer_final_fields
     - prefer_final_in_for_each
     - prefer_final_locals
-    - prefer_final_parameters
+    # prefer_final_parameters  # deprecated in newer Dart SDKs
     - prefer_for_elements_to_map_fromIterable
     - prefer_foreach
     - prefer_function_declarations_over_variables

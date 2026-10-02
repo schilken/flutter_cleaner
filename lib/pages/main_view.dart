@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 import '../providers/app_notifier.dart';
@@ -20,7 +20,6 @@ class _MainViewState extends ConsumerState<MainView> {
   @override
   void initState() {
     Future<void>.delayed(const Duration(milliseconds: 100), () {
-      final currentDirectory = ref.watch(appNotifierProvider).currentDirectory;
       ref.read(diskUsageNotifierProvider.notifier).scan();
     });
     super.initState();
